@@ -17,3 +17,9 @@
 - Database: MongoDB
 - Styling: Bootstrap
 - Authentication: Simple Token
+
+## Testing Strategy
+This project will implement:
+1. Unit Tests (Models & Components)
+2. API Tests (Endpoints)
+3. Performance Tests (Lighthouse)
