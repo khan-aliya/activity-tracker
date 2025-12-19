@@ -1,4 +1,3 @@
-
 {
     "$schema": "https://getcomposer.org/schema.json",
     "name": "aliya-khan/activity-tracker-backend",
@@ -10,6 +9,7 @@
         "php": "^8.2",
         "jenssegers/mongodb": "^5.5",
         "laravel/framework": "^12.0",
+        "laravel/sanctum": "^4.2",
         "laravel/tinker": "^2.10.1"
     },
     "require-dev": {
