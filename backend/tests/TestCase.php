@@ -6,5 +6,16 @@ use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
-    //
+    use CreatesApplication;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        // Don't clear database in setup - causes MySQL prepare() error
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+    }
 }

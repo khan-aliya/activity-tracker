@@ -75,8 +75,7 @@ class AuthController extends Controller
     {
         $user = $request->user();
         if ($user) {
-            $user->api_token = null;
-            $user->save();
+            $user->clearToken(); // Fixed: Use clearToken() instead of setting to null
         }
 
         return response()->json(['message' => 'Logged out successfully']);

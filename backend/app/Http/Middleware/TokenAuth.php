@@ -11,15 +11,10 @@ class TokenAuth
 {
     public function handle(Request $request, Closure $next): Response
     {
-        $token = $request->bearerToken() ?? $request->header('Authorization');
-        
+        $token = $request->bearerToken();
+
         if (!$token) {
             return response()->json(['error' => 'Token not provided'], 401);
-        }
-
-        // Remove 'Bearer ' prefix if present
-        if (str_starts_with($token, 'Bearer ')) {
-            $token = substr($token, 7);
         }
 
         $user = User::where('api_token', $token)->first();
@@ -28,8 +23,7 @@ class TokenAuth
             return response()->json(['error' => 'Invalid token'], 401);
         }
 
-        // Attach user to request properly
-        $request->merge(['user' => $user]);
+        // ✅ Laravel 12 correct way
         $request->setUserResolver(function () use ($user) {
             return $user;
         });

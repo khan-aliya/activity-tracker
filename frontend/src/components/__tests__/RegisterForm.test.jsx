@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import RegisterForm from '../RegisterForm';
-import { AuthProvider } from '../../contexts/AuthContext';
+import RegisterForm from '../auth/RegisterForm';
+import { AuthProvider } from '../../context/AuthContext';
 
 // Mock axios and navigation
 const mockNavigate = jest.fn();

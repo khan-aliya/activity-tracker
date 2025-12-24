@@ -31,5 +31,15 @@ class Activity extends Model
         return $this->belongsTo(User::class);
     }
 
-    // Remove getIdAttribute() method since it's already in parent class
+    // For testing - FIXED for MongoDB
+    public static function truncate()
+    {
+        try {
+            self::query()->delete();
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\DB::connection('mongodb')
+                ->collection((new static)->getTable())
+                ->deleteMany([]);
+        }
+    }
 }

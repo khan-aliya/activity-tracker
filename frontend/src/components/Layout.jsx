@@ -1,5 +1,5 @@
 import { Outlet, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import { Container, Navbar, Nav, Dropdown } from 'react-bootstrap';
 import { FaUserCircle, FaSignOutAlt } from 'react-icons/fa';
 

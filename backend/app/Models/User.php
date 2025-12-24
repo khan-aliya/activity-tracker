@@ -11,7 +11,6 @@ class User extends Authenticatable
 {
     use Notifiable;
 
-    // For MongoDB
     protected $connection = 'mongodb';
     protected $collection = 'users';
 
@@ -45,6 +44,12 @@ class User extends Authenticatable
         return $this->api_token;
     }
 
+    public function clearToken()
+    {
+        $this->api_token = null;
+        $this->save();
+    }
+
     public function activities()
     {
         return $this->hasMany(Activity::class);
@@ -53,6 +58,26 @@ class User extends Authenticatable
     // Helper method to convert MongoDB ID to string
     public function getIdAttribute()
     {
-        return (string) $this->attributes['_id'];
+        if (isset($this->attributes['_id'])) {
+            return (string) $this->attributes['_id'];
+        }
+        if (isset($this->attributes['id'])) {
+            return (string) $this->attributes['id'];
+        }
+        return null;
+    }
+
+    // For testing - FIXED truncate method for MongoDB
+    public static function truncate()
+    {
+        // For MongoDB, we delete all documents
+        try {
+            self::query()->delete();
+        } catch (\Exception $e) {
+            // Alternative method
+            \Illuminate\Support\Facades\DB::connection('mongodb')
+                ->collection((new static)->getTable())
+                ->deleteMany([]);
+        }
     }
 }
