@@ -1,44 +1,33 @@
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './context/AuthContext';
-import LoginForm from './components/auth/LoginForm';
-import RegisterForm from './components/auth/RegisterForm';
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
+import LoginForm from './components/LoginForm';
+import RegisterForm from './components/RegisterForm';
 import Dashboard from './components/Dashboard';
-import Layout from './components/Layout';
-import { Spinner } from 'react-bootstrap';
-
-const PrivateRoute = ({ children }) => {
-  const { user, loading } = useAuth();
-  
-  if (loading) {
-    return (
-      <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
-        <Spinner animation="border" variant="primary" />
-      </div>
-    );
-  }
-  
-  return user ? children : <Navigate to="/login" />;
-};
+import Navbar from './components/Navbar';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
-  return (
-    <Router>
-      <AuthProvider>
-        <Routes>
-          <Route path="/login" element={<LoginForm />} />
-          <Route path="/register" element={<RegisterForm />} />
-          <Route path="/" element={
-            <PrivateRoute>
-              <Layout />
-            </PrivateRoute>
-          }>
-            <Route index element={<Navigate to="/dashboard" />} />
-            <Route path="dashboard" element={<Dashboard />} />
-          </Route>
-        </Routes>
-      </AuthProvider>
-    </Router>
-  );
+    return (
+        <Router>
+            <AuthProvider>
+                <div className="App">
+                    <Navbar />
+                    <Routes>
+                        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                        <Route path="/login" element={<LoginForm />} />
+                        <Route path="/register" element={<RegisterForm />} />
+                        <Route path="/dashboard" element={
+                            <ProtectedRoute>
+                                <Dashboard />
+                            </ProtectedRoute>
+                        } />
+                    </Routes>
+                </div>
+            </AuthProvider>
+        </Router>
+    );
 }
 
 export default App;

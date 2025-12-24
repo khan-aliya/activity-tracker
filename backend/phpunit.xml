@@ -18,10 +18,15 @@
         </include>
     </source>
     <php>
-        <env name="APP_ENV" value="testing"/>
-        <env name="DB_CONNECTION" value="mongodb"/>
-        <env name="MONGODB_DATABASE" value="activity_tracker_test"/>
-        <env name="MONGODB_URI" value="mongodb://localhost:27017"/>
-        <env name="APP_KEY" value="base64:testkey123456789012345678901234567890"/>
-    </php>
+    <env name="APP_ENV" value="testing"/>
+    <env name="BCRYPT_ROUNDS" value="4"/>
+    <env name="CACHE_DRIVER" value="array"/>
+    <env name="DB_CONNECTION" value="mongodb"/>
+    <env name="DB_DATABASE" value="activity_tracker_test"/>
+    <env name="MONGODB_URI" value="mongodb://127.0.0.1:27017/activity_tracker_test"/>
+    <env name="MAIL_MAILER" value="array"/>
+    <env name="QUEUE_CONNECTION" value="sync"/>
+    <env name="SESSION_DRIVER" value="array"/>
+    <env name="TELESCOPE_ENABLED" value="false"/>
+</php>
 </phpunit>

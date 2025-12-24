@@ -2,34 +2,42 @@
 
 namespace App\Models;
 
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 use MongoDB\Laravel\Eloquent\Model;
-use MongoDB\Laravel\Auth\Authenticatable;
-use Illuminate\Auth\Authenticatable as AuthenticatableTrait;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 
-class User extends Model implements AuthenticatableContract
+class User extends Authenticatable
 {
-    use AuthenticatableTrait;
+    use Notifiable;
+
+    // For MongoDB
+    protected $connection = 'mongodb';
+    protected $collection = 'users';
 
     protected $fillable = [
         'name',
         'email',
         'password',
-        'api_token',
+        'api_token'
     ];
 
     protected $hidden = [
         'password',
         'remember_token',
-        'api_token',
+        'api_token'
     ];
 
-    public function activities()
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+
+    // Automatically hash passwords
+    public function setPasswordAttribute($value)
     {
-        return $this->hasMany(Activity::class);
+        $this->attributes['password'] = Hash::make($value);
     }
 
-    // Generate API token
     public function generateToken()
     {
         $this->api_token = bin2hex(random_bytes(32));
@@ -37,10 +45,14 @@ class User extends Model implements AuthenticatableContract
         return $this->api_token;
     }
 
-    // Clear API token
-    public function clearToken()
+    public function activities()
     {
-        $this->api_token = null;
-        $this->save();
+        return $this->hasMany(Activity::class);
+    }
+
+    // Helper method to convert MongoDB ID to string
+    public function getIdAttribute()
+    {
+        return (string) $this->attributes['_id'];
     }
 }
