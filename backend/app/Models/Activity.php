@@ -2,44 +2,36 @@
 
 namespace App\Models;
 
-use MongoDB\Laravel\Eloquent\Model;
+use MongoDB\Laravel\Eloquent\Model as Eloquent;
 
-class Activity extends Model
+class Activity extends Eloquent
 {
     protected $connection = 'mongodb';
     protected $collection = 'activities';
-
+    
     protected $fillable = [
         'user_id',
         'title',
-        'description',
-        'type',
+        'category',
+        'sub_category',
         'duration',
-        'calories_burned',
         'date',
+        'feeling',
+        'notes',
         'status'
     ];
-
+    
     protected $casts = [
-        'date' => 'datetime',
         'duration' => 'integer',
-        'calories_burned' => 'integer'
+        'feeling' => 'integer',
+        'date' => 'date'
     ];
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    // For testing - FIXED for MongoDB
-    public static function truncate()
-    {
-        try {
-            self::query()->delete();
-        } catch (\Exception $e) {
-            \Illuminate\Support\Facades\DB::connection('mongodb')
-                ->collection((new static)->getTable())
-                ->deleteMany([]);
-        }
-    }
+    
+    // Constants for categories (update based on your needs)
+    public const CATEGORIES = ['Self-care', 'Productivity', 'Reward'];
+    public const SUB_CATEGORIES = [
+        'Self-care' => ['Workout', 'Meditation', 'Reading', 'Sleep'],
+        'Productivity' => ['Work', 'Study', 'Cleaning', 'Projects'],
+        'Reward' => ['Gaming', 'Shopping', 'Social', 'Entertainment']
+    ];
 }

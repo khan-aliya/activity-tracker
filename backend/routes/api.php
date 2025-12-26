@@ -1,46 +1,40 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\ActivityController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ActivityController;
 
-// Test route
-Route::get('/test', function () {
+// Public routes
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::get('/categories', [ActivityController::class, 'categories']);
+
+Route::get('/test-connection', function() {
     return response()->json([
-        'message' => 'API is working',
-        'timestamp' => now()->toDateTimeString(),
-        'version' => '1.0',
-        'status' => 'active'
+        'status' => 'success',
+        'message' => 'Laravel backend is working!',
+        'timestamp' => now()
     ]);
 });
 
-// Public auth routes
-Route::post('/auth/register', [AuthController::class, 'register']);
-Route::post('/auth/login', [AuthController::class, 'login']);
-
-// Protected routes
-Route::middleware(['auth:api'])->group(function () {
-    Route::post('/auth/logout', [AuthController::class, 'logout']);
-    Route::get('/auth/user', [AuthController::class, 'user']);
+// Protected routes with simple token middleware
+Route::middleware('simple.token')->group(function () {
+    Route::get('/debug-middleware', function (\Illuminate\Http\Request $request) {
+        return response()->json([
+            'message' => 'Middleware test',
+            'user' => auth()->user() ? [
+                'id' => auth()->user()->_id,
+                'email' => auth()->user()->email,
+                'has_api_token' => isset(auth()->user()->api_token)
+            ] : null,
+            'token' => $request->bearerToken()
+        ]);
+    });
+    
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/user', [AuthController::class, 'user']);
     
     Route::apiResource('activities', ActivityController::class);
-    Route::get('/activities/stats', [ActivityController::class, 'stats']);
-});
-
-// Fallback for testing
-Route::fallback(function () {
-    return response()->json([
-        'error' => 'Route not found',
-        'available_routes' => [
-            'GET /api/test',
-            'POST /api/auth/register',
-            'POST /api/auth/login',
-            'GET /api/activities',
-            'POST /api/activities',
-            'GET /api/activities/{id}',
-            'PUT /api/activities/{id}',
-            'DELETE /api/activities/{id}',
-            'GET /api/activities/stats'
-        ]
-    ], 404);
+    // Route::get('/stats', [ActivityController::class, 'stats']);
+    
 });
