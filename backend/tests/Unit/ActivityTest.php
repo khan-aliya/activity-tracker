@@ -3,67 +3,56 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
-use App\Models\User;
 use App\Models\Activity;
-use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ActivityTest extends TestCase
 {
-    protected $user;
+    use RefreshDatabase;
 
-    protected function setUp(): void
+    /** @test */
+    public function it_can_create_an_activity()
     {
-        parent::setUp();
-        
-        try {
-            User::truncate();
-            Activity::truncate();
-            
-            $this->user = User::create([
-                'name' => 'Test User',
-                'email' => 'test@example.com',
-                'password' => Hash::make('password123')
-            ]);
-        } catch (\Exception $e) {
-            $this->markTestSkipped('Setup failed: ' . $e->getMessage());
-        }
-    }
+        // Create a user first
+        $user = User::factory()->create();
 
-    public function test_activity_model_exists()
-    {
-        $activity = new Activity();
+        $activity = Activity::create([
+            'user_id' => $user->_id,
+            'title' => 'Test Activity',
+            'description' => 'This is a test description.',
+            'type' => 'exercise',
+            'duration' => 30,
+            'date' => now()->format('Y-m-d'),
+            'status' => 'completed'
+        ]);
+
         $this->assertInstanceOf(Activity::class, $activity);
+        $this->assertEquals('Test Activity', $activity->title);
+        $this->assertEquals('exercise', $activity->type);
+        $this->assertEquals($user->_id, $activity->user_id);
     }
 
-    public function test_activity_has_fillable_fields()
+    /** @test */
+    public function activity_belongs_to_a_user()
     {
-        $activity = new Activity();
-        $fillable = $activity->getFillable();
+        $user = User::factory()->create();
+        $activity = Activity::factory()->create(['user_id' => $user->_id]);
+
+        $this->assertInstanceOf(User::class, $activity->user);
+        $this->assertEquals($user->_id, $activity->user->_id);
+    }
+
+    /** @test */
+    public function activity_has_required_fields()
+    {
+        $user = User::factory()->create();
         
-        $this->assertContains('title', $fillable);
-        $this->assertContains('type', $fillable);
-        $this->assertContains('duration', $fillable);
-        $this->assertContains('user_id', $fillable);
-    }
-
-    public function test_activity_can_be_created()
-    {
-        try {
-            $activity = Activity::create([
-                'user_id' => $this->user->id,
-                'title' => 'Morning Run',
-                'type' => 'exercise',
-                'duration' => 30,
-                'calories_burned' => 300,
-                'date' => '2023-12-25',
-                'status' => 'completed'
-            ]);
-
-            $this->assertEquals('Morning Run', $activity->title);
-            $this->assertEquals('exercise', $activity->type);
-            $this->assertEquals(30, $activity->duration);
-        } catch (\Exception $e) {
-            $this->markTestSkipped('Activity creation failed: ' . $e->getMessage());
-        }
+        $this->expectException(\Exception::class);
+        
+        Activity::create([
+            'user_id' => $user->_id,
+            // Missing required fields
+        ]);
     }
 }

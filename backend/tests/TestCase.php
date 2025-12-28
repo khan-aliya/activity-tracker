@@ -2,20 +2,30 @@
 
 namespace Tests;
 
-use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use MongoDBTestCase;
 
-abstract class TestCase extends BaseTestCase
+abstract class TestCase extends MongoDBTestCase
 {
-    use CreatesApplication;
-
-    protected function setUp(): void
+    protected function createUser($attributes = [])
     {
-        parent::setUp();
-        // Don't clear database in setup - causes MySQL prepare() error
+        return \App\Models\User::factory()->create(array_merge([
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'password' => bcrypt('password123')
+        ], $attributes));
     }
 
-    protected function tearDown(): void
+    protected function authenticate($user = null)
     {
-        parent::tearDown();
+        if (!$user) {
+            $user = $this->createUser();
+        }
+        
+        $token = $user->createToken('test-token')->plainTextToken;
+        
+        return [
+            'Authorization' => 'Bearer ' . $token,
+            'Accept' => 'application/json'
+        ];
     }
 }

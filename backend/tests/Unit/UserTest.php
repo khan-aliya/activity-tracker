@@ -4,36 +4,57 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 use App\Models\User;
+use App\Models\Activity;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Hash;
 
 class UserTest extends TestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        // Don't call truncate() here either
-    }
+    use RefreshDatabase;
 
-    public function test_user_model_exists()
+    /** @test */
+    public function user_can_be_created()
     {
-        $user = new User();
+        $user = User::factory()->create([
+            'name' => 'John Doe',
+            'email' => 'john@example.com'
+        ]);
+
         $this->assertInstanceOf(User::class, $user);
+        $this->assertEquals('John Doe', $user->name);
+        $this->assertEquals('john@example.com', $user->email);
+        $this->assertTrue(Hash::check('password123', $user->password));
     }
 
-    public function test_user_has_fillable_fields()
+    /** @test */
+    public function user_has_many_activities()
     {
-        $user = new User();
-        $fillable = $user->getFillable();
-        
-        $this->assertContains('name', $fillable);
-        $this->assertContains('email', $fillable);
-        $this->assertContains('password', $fillable);
+        $user = User::factory()->create();
+        $activity1 = Activity::factory()->create(['user_id' => $user->_id]);
+        $activity2 = Activity::factory()->create(['user_id' => $user->_id]);
+
+        $this->assertCount(2, $user->activities);
+        $this->assertInstanceOf(Activity::class, $user->activities->first());
     }
 
-    public function test_user_has_activities_relationship()
+    /** @test */
+    public function user_can_generate_auth_token()
     {
-        $user = new User();
-        $this->assertTrue(method_exists($user, 'activities'));
+        $user = User::factory()->create();
+        $token = $user->createToken('test-token')->plainTextToken;
+
+        $this->assertIsString($token);
+        $this->assertNotEmpty($token);
     }
 
-    // Remove test that creates user if it fails
+    /** @test */
+    public function user_password_is_hashed()
+    {
+        $user = User::factory()->create([
+            'password' => 'plainpassword'
+        ]);
+
+        $this->assertNotEquals('plainpassword', $user->password);
+        $this->assertTrue(Hash::check('plainpassword', $user->password));
+    }
 }

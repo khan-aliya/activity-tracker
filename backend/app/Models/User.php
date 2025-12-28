@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
-use MongoDB\Laravel\Eloquent\Model as Eloquent;
-use Illuminate\Auth\Authenticatable;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 
-class User extends Eloquent implements AuthenticatableContract
+class User extends Eloquent
 {
-    use Authenticatable, Notifiable;
-    // REMOVE: HasApiTokens - we're not using Sanctum anymore
+    use HasApiTokens, HasFactory, Notifiable;
 
     protected $connection = 'mongodb';
     protected $collection = 'users';
@@ -19,17 +20,20 @@ class User extends Eloquent implements AuthenticatableContract
         'name',
         'email',
         'password',
-        'api_token',
     ];
 
     protected $hidden = [
         'password',
         'remember_token',
-        'api_token',
     ];
 
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function activities()
+    {
+        return $this->hasMany(Activity::class);
+    }
 }
