@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import ActivityForm from '../ActivityForm';
+import ActivityForm from '../Dashboard/ActivityForm';
 import '@testing-library/jest-dom';
 
 const mockOnSubmit = jest.fn();
