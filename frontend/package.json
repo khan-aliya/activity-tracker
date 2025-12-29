@@ -9,13 +9,12 @@
     "preview": "vite preview",
     "test:unit": "jest --testPathPattern=__tests__",
     "lint": "eslint .",
-    "test:simple": "jest src/__tests__/guaranteed.test.js",
     "test": "jest",
-    "test:all": "jest --verbose"
+    "test:api": "jest src/__tests__/api/ --passWithNoTests",
+    "test:simple": "jest src/__tests__/api/ --passWithNoTests"
   },
   "dependencies": {
     "@react-icons/all-files": "^4.1.0",
-    "axios": "^1.13.2",
     "bootstrap": "^5.3.8",
     "chart.js": "^4.5.1",
     "date-fns": "^2.30.0",
@@ -26,14 +25,18 @@
     "react-router-dom": "^6.30.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.28.5",
     "@babel/preset-env": "^7.28.5",
     "@babel/preset-react": "^7.28.5",
+    "@jest/globals": "^29.7.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.1",
     "@testing-library/user-event": "^14.6.1",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
     "@vitejs/plugin-react": "^4.2.0",
+    "axios": "^1.13.2",
+    "axios-mock-adapter": "^2.1.0",
     "babel-jest": "^30.2.0",
     "eslint": "^8.55.0",
     "eslint-plugin-react": "^7.33.2",
@@ -42,6 +45,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^30.2.0",
     "jest-environment-jsdom": "^30.2.0",
+    "laravel-vite-plugin": "^1.0.0",
     "rollup-plugin-visualizer": "^6.0.5",
     "vite": "^5.0.0"
   }

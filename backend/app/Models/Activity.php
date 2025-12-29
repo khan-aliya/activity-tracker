@@ -2,33 +2,36 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
+use MongoDB\Laravel\Eloquent\Model as Eloquent;
 
 class Activity extends Eloquent
 {
-    use HasFactory;
-
     protected $connection = 'mongodb';
     protected $collection = 'activities';
-
+    
     protected $fillable = [
         'user_id',
         'title',
-        'description',
-        'type',
+        'category',
+        'sub_category',
         'duration',
         'date',
-        'status',
+        'feeling',
+        'notes',
+        'status'
     ];
-
+    
     protected $casts = [
         'duration' => 'integer',
-        'date' => 'date',
+        'feeling' => 'integer',
+        'date' => 'date'
     ];
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+    
+    // Constants for categories (update based on your needs)
+    public const CATEGORIES = ['Self-care', 'Productivity', 'Reward'];
+    public const SUB_CATEGORIES = [
+        'Self-care' => ['Workout', 'Meditation', 'Reading', 'Sleep'],
+        'Productivity' => ['Work', 'Study', 'Cleaning', 'Projects'],
+        'Reward' => ['Gaming', 'Shopping', 'Social', 'Entertainment']
+    ];
 }

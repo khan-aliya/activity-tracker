@@ -21,7 +21,6 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
-        
     ];
 
     /**
@@ -67,6 +66,5 @@ class Kernel extends HttpKernel
         
         // Add your custom middleware here
         'simple.token' => \App\Http\Middleware\SimpleTokenAuth::class,
-        'cache.api' => \App\Http\Middleware\CacheApiResponses::class,
     ];
 }

@@ -1,21 +1,48 @@
+
 <?php
+
+use Illuminate\Support\Str;
 
 return [
     'default' => env('DB_CONNECTION', 'mongodb'),
     
     'connections' => [
-        'mongodb' => [
-            'driver' => 'mongodb',
-            'dsn' => env('MONGODB_URI', 'mongodb://127.0.0.1:27017/activity_tracker'),
-            'database' => 'activity_tracker',
-        ],
-        
-        'testing' => [
-            'driver' => 'mongodb',
-            'dsn' => env('MONGODB_URI', 'mongodb://127.0.0.1:27017/activity_tracker_test'),
-            'database' => 'activity_tracker_test',
-        ],
+    'mongodb' => [
+        'driver' => 'mongodb',
+        'host' => env('DB_HOST', '127.0.0.1'),
+        'port' => env('DB_PORT', 27017),
+        'database' => env('DB_DATABASE', 'activity_tracker'),
+        'username' => env('DB_USERNAME', ''),
+        'password' => env('DB_PASSWORD', ''),
+        'options' => [
+            'database' => 'admin'
+        ]
     ],
+],
     
     'migrations' => 'migrations',
+    
+    'redis' => [
+        'client' => env('REDIS_CLIENT', 'phpredis'),
+        'options' => [
+            'cluster' => env('REDIS_CLUSTER', 'redis'),
+            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
+        ],
+        'default' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'username' => env('REDIS_USERNAME'),
+            'password' => env('REDIS_PASSWORD'),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_DB', '0'),
+        ],
+        'cache' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'username' => env('REDIS_USERNAME'),
+            'password' => env('REDIS_PASSWORD'),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_CACHE_DB', '1'),
+        ],
+    ],
 ];

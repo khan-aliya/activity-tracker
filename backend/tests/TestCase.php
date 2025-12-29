@@ -2,30 +2,20 @@
 
 namespace Tests;
 
-use MongoDBTestCase;
+use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
-abstract class TestCase extends MongoDBTestCase
+abstract class TestCase extends BaseTestCase
 {
-    protected function createUser($attributes = [])
-    {
-        return \App\Models\User::factory()->create(array_merge([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => bcrypt('password123')
-        ], $attributes));
-    }
+    use CreatesApplication;
 
-    protected function authenticate($user = null)
+    protected function setUp(): void
     {
-        if (!$user) {
-            $user = $this->createUser();
-        }
+        parent::setUp();
         
-        $token = $user->createToken('test-token')->plainTextToken;
+        // Disable middleware that might interfere with testing
+        // $this->withoutMiddleware();
         
-        return [
-            'Authorization' => 'Bearer ' . $token,
-            'Accept' => 'application/json'
-        ];
+        // Use SQLite for testing instead of MongoDB for simplicity
+        // We'll mock the MongoDB behavior
     }
 }

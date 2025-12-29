@@ -5,46 +5,36 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ActivityController;
 
 // Public routes
-Route::get('/health', function () {
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::get('/categories', [ActivityController::class, 'categories']);
+
+Route::get('/test-connection', function() {
     return response()->json([
-        'status' => 'ok',
-        'message' => 'Activity Tracker API v1.0',
-        'database' => 'MongoDB connected',
-        'timestamp' => now()->toDateTimeString()
+        'status' => 'success',
+        'message' => 'Laravel backend is working!',
+        'timestamp' => now()
     ]);
 });
 
-// Test route to check MongoDB
-Route::get('/test-db', function () {
-    try {
-        $connection = DB::connection('mongodb');
+// Protected routes with simple token middleware
+Route::middleware('simple.token')->group(function () {
+    Route::get('/debug-middleware', function (\Illuminate\Http\Request $request) {
         return response()->json([
-            'database' => $connection->getDatabaseName(),
-            'status' => 'connected',
-            'server' => 'MongoDB'
+            'message' => 'Middleware test',
+            'user' => auth()->user() ? [
+                'id' => auth()->user()->_id,
+                'email' => auth()->user()->email,
+                'has_api_token' => isset(auth()->user()->api_token)
+            ] : null,
+            'token' => $request->bearerToken()
         ]);
-    } catch (\Exception $e) {
-        return response()->json(['error' => $e->getMessage()], 500);
-    }
-});
-
-// Auth routes
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
-
-// Protected routes
-Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('activities', ActivityController::class);
-    Route::get('/user', function (\Illuminate\Http\Request $request) {
-        return $request->user();
     });
+    
     Route::post('/logout', [AuthController::class, 'logout']);
-});
-
-// Fallback for undefined routes
-Route::fallback(function () {
-    return response()->json([
-        'message' => 'API endpoint not found. Check /api/health for available routes.',
-        'documentation' => 'See routes/api.php for endpoint definitions'
-    ], 404);
+    Route::get('/user', [AuthController::class, 'user']);
+    
+    Route::apiResource('activities', ActivityController::class);
+    // Route::get('/stats', [ActivityController::class, 'stats']);
+    
 });

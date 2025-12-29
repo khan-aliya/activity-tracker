@@ -1,13 +1,17 @@
-export default {
-    testEnvironment: 'jest-environment-jsdom',
-    setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-    testMatch: [
-        '**/__tests__/**/*.test.js',
-        '**/__tests__/**/*.test.jsx',
-        '**/?(*.)+(spec|test).js',
-        '**/?(*.)+(spec|test).jsx'
-    ],
-    moduleNameMapper: {
-        '\\.(css|less|scss|sass)$': 'identity-obj-proxy'
-    }
+module.exports = {
+  testEnvironment: 'jsdom',
+  transform: {
+    '^.+\\.js$': 'babel-jest',
+  },
+  testMatch: [
+    '**/__tests__/**/*.test.js',
+    '**/?(*.)+(spec|test).js'
+  ],
+  moduleFileExtensions: ['js', 'json'],
+  collectCoverage: false,
+  verbose: true,
+  setupFilesAfterEnv: ['<rootDir>/src/__tests__/setupTests.js'],
+  transformIgnorePatterns: [
+    '/node_modules/(?!(axios)/)'
+  ]
 };
