@@ -1,0 +1,166 @@
+
+> activity-tracker@0.0.0 test:coverage
+> jest --config=jest.config.cjs --coverage --watchAll=false
+
+  console.warn
+    ⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+
+      12 |
+      13 | test('renders Activity Tracker text', () => {
+    > 14 |   render(<App />);
+         |         ^
+      15 |   const linkElement = screen.getByText(/Activity Tracker/i);
+      16 |   expect(linkElement).toBeInTheDocument();
+      17 | });
+
+      at warn (node_modules/react-router/lib/deprecations.ts:9:13)
+      at warnOnce (node_modules/react-router/lib/deprecations.ts:14:3)
+      at Object.logDeprecation [as UNSAFE_logV6DeprecationWarnings] (node_modules/react-router/lib/deprecations.ts:26:5)
+      at logV6DeprecationWarnings (node_modules/react-router-dom/index.tsx:816:25)
+      at commitHookEffectListMount (node_modules/react-dom/cjs/react-dom.development.js:23189:26)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom.development.js:24970:11)
+      at commitPassiveMountEffects_complete (node_modules/react-dom/cjs/react-dom.development.js:24930:9)
+      at commitPassiveMountEffects_begin (node_modules/react-dom/cjs/react-dom.development.js:24917:7)
+      at commitPassiveMountEffects (node_modules/react-dom/cjs/react-dom.development.js:24905:3)
+      at flushPassiveEffectsImpl (node_modules/react-dom/cjs/react-dom.development.js:27078:3)
+      at flushPassiveEffects (node_modules/react-dom/cjs/react-dom.development.js:27023:14)
+      at node_modules/react-dom/cjs/react-dom.development.js:26808:9
+      at flushActQueue (node_modules/react/cjs/react.development.js:2667:24)
+      at act (node_modules/react/cjs/react.development.js:2582:11)
+      at node_modules/@testing-library/react/dist/act-compat.js:46:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:291:10)
+      at Object.<anonymous> (src/App.test.js:14:9)
+
+  console.warn
+    ⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+      12 |
+      13 | test('renders Activity Tracker text', () => {
+    > 14 |   render(<App />);
+         |         ^
+      15 |   const linkElement = screen.getByText(/Activity Tracker/i);
+      16 |   expect(linkElement).toBeInTheDocument();
+      17 | });
+
+      at warn (node_modules/react-router/lib/deprecations.ts:9:13)
+      at warnOnce (node_modules/react-router/lib/deprecations.ts:14:3)
+      at Object.logDeprecation [as UNSAFE_logV6DeprecationWarnings] (node_modules/react-router/lib/deprecations.ts:37:5)
+      at logV6DeprecationWarnings (node_modules/react-router-dom/index.tsx:816:25)
+      at commitHookEffectListMount (node_modules/react-dom/cjs/react-dom.development.js:23189:26)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom.development.js:24970:11)
+      at commitPassiveMountEffects_complete (node_modules/react-dom/cjs/react-dom.development.js:24930:9)
+      at commitPassiveMountEffects_begin (node_modules/react-dom/cjs/react-dom.development.js:24917:7)
+      at commitPassiveMountEffects (node_modules/react-dom/cjs/react-dom.development.js:24905:3)
+      at flushPassiveEffectsImpl (node_modules/react-dom/cjs/react-dom.development.js:27078:3)
+      at flushPassiveEffects (node_modules/react-dom/cjs/react-dom.development.js:27023:14)
+      at node_modules/react-dom/cjs/react-dom.development.js:26808:9
+      at flushActQueue (node_modules/react/cjs/react.development.js:2667:24)
+      at act (node_modules/react/cjs/react.development.js:2582:11)
+      at node_modules/@testing-library/react/dist/act-compat.js:46:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:291:10)
+      at Object.<anonymous> (src/App.test.js:14:9)
+
+  console.error
+    Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+    
+    When testing, code that resolves suspended data should be wrapped into act(...):
+    
+    act(() => {
+      /* finish loading suspended data */
+    });
+    /* assert on the output */
+    
+    This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+      at printWarning (node_modules/react-dom/cjs/react-dom.development.js:86:30)
+      at error (node_modules/react-dom/cjs/react-dom.development.js:60:7)
+      at warnIfSuspenseResolutionNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom.development.js:27643:7)
+      at pingSuspendedRoot (node_modules/react-dom/cjs/react-dom.development.js:27228:3)
+
+  console.error
+    Error: Not implemented: window.alert
+        at module.exports (/Users/aliyakhan/Desktop/Aliya/Coding/Projects/activity-tracker/frontend/node_modules/jsdom/lib/jsdom/browser/not-implemented.js:9:17)
+        at /Users/aliyakhan/Desktop/Aliya/Coding/Projects/activity-tracker/frontend/node_modules/jsdom/lib/jsdom/browser/Window.js:960:7
+        at alert (/Users/aliyakhan/Desktop/Aliya/Coding/Projects/activity-tracker/frontend/src/components/Dashboard/ActivityTable.jsx:180:17) {
+      type: 'not implemented'
+    }
+
+      178 |                 await activityService.delete(id);
+      179 |                 fetchActivities(currentPage); // Refresh the list
+    > 180 |                 alert('Activity deleted successfully!');
+          |                 ^
+      181 |             } catch (error) {
+      182 |                 console.error('Error deleting activity:', error);
+      183 |                 alert(error.response?.data?.message || 'Failed to delete activity');
+
+      at VirtualConsole.<anonymous> (node_modules/@jest/environment-jsdom-abstract/build/index.js:87:23)
+      at module.exports (node_modules/jsdom/lib/jsdom/browser/not-implemented.js:12:26)
+      at node_modules/jsdom/lib/jsdom/browser/Window.js:960:7
+      at alert (src/components/Dashboard/ActivityTable.jsx:180:17)
+
+  console.error
+    Login error: TypeError: Cannot read properties of undefined (reading 'includes')
+        at includes (/Users/aliyakhan/Desktop/Aliya/Coding/Projects/activity-tracker/frontend/src/components/Auth/Login.jsx:39:36)
+
+      47 |         
+      48 | } catch (err) {
+    > 49 |   console.error('Login error:', err);
+         |           ^
+      50 |   
+      51 |   let errorMessage = 'An error occurred during login';
+      52 |   
+
+      at error (src/components/Auth/Login.jsx:49:11)
+
+  console.error
+    Login error: Error: Invalid credentials
+        at Object.<anonymous> (/Users/aliyakhan/Desktop/Aliya/Coding/Projects/activity-tracker/frontend/src/components/Auth/Login.test.jsx:93:37)
+        at Promise.finally.completed (/Users/aliyakhan/Desktop/Aliya/Coding/Projects/activity-tracker/frontend/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+        at new Promise (<anonymous>)
+        at callAsyncCircusFn (/Users/aliyakhan/Desktop/Aliya/Coding/Projects/activity-tracker/frontend/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+        at _callCircusTest (/Users/aliyakhan/Desktop/Aliya/Coding/Projects/activity-tracker/frontend/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+        at _runTest (/Users/aliyakhan/Desktop/Aliya/Coding/Projects/activity-tracker/frontend/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+        at /Users/aliyakhan/Desktop/Aliya/Coding/Projects/activity-tracker/frontend/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+        at _runTestsForDescribeBlock (/Users/aliyakhan/Desktop/Aliya/Coding/Projects/activity-tracker/frontend/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+        at _runTestsForDescribeBlock (/Users/aliyakhan/Desktop/Aliya/Coding/Projects/activity-tracker/frontend/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+        at run (/Users/aliyakhan/Desktop/Aliya/Coding/Projects/activity-tracker/frontend/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+        at runAndTransformResultsToJestFormat (/Users/aliyakhan/Desktop/Aliya/Coding/Projects/activity-tracker/frontend/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+        at jestAdapter (/Users/aliyakhan/Desktop/Aliya/Coding/Projects/activity-tracker/frontend/node_modules/jest-circus/build/runner.js:101:19)
+        at runTestInternal (/Users/aliyakhan/Desktop/Aliya/Coding/Projects/activity-tracker/frontend/node_modules/jest-runner/build/index.js:275:16)
+        at runTest (/Users/aliyakhan/Desktop/Aliya/Coding/Projects/activity-tracker/frontend/node_modules/jest-runner/build/index.js:343:7)
+
+      47 |         
+      48 | } catch (err) {
+    > 49 |   console.error('Login error:', err);
+         |           ^
+      50 |   
+      51 |   let errorMessage = 'An error occurred during login';
+      52 |   
+
+      at error (src/components/Auth/Login.jsx:49:11)
+
+--------------------------|---------|----------|---------|---------|-----------------------------------------------------------------------------------------------------------
+File                      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s                                                                                         
+--------------------------|---------|----------|---------|---------|-----------------------------------------------------------------------------------------------------------
+All files                 |   48.63 |    49.01 |   45.04 |      50 |                                                                                                           
+ src                      |      60 |       25 |   44.44 |   73.33 |                                                                                                           
+  App.jsx                 |      60 |       25 |   44.44 |   73.33 | 24-30                                                                                                     
+ src/components/Auth      |   72.22 |       50 |      75 |   72.22 |                                                                                                           
+  Login.jsx               |   72.22 |       50 |      75 |   72.22 | 24,37,40-44,55-56,58,97                                                                                   
+ src/components/Dashboard |   45.33 |    51.68 |    40.9 |   47.29 |                                                                                                           
+  ActivityFilter.jsx      |      65 |      100 |   41.66 |      65 | 70,85-169                                                                                                 
+  ActivityForm.jsx        |    32.5 |    41.66 |      25 |   33.33 | 36-75,80,87,95,106-107,138,158                                                                            
+  ActivityTable.jsx       |   46.02 |    45.03 |   45.23 |   48.46 | 68-93,107-124,150-171,182-183,196-197,209-218,225-226,233-235,247,256,284-355,376-390,406,429-505,657-683 
+ src/components/Layout    |     100 |       50 |     100 |     100 |                                                                                                           
+  Navbar.jsx              |     100 |       50 |     100 |     100 | 16                                                                                                        
+ src/contexts             |   31.37 |     12.5 |      50 |      30 |                                                                                                           
+  AuthContext.jsx         |   31.37 |     12.5 |      50 |      30 | 18-24,31-44,52-60,65-78                                                                                   
+ src/pages                |      25 |      100 |       0 |      25 |                                                                                                           
+  HomePage.jsx            |      25 |      100 |       0 |      25 | 6-91                                                                                                      
+ src/services             |   54.54 |     64.7 |   52.17 |   54.54 |                                                                                                           
+  activityService.js      |   88.88 |      100 |   83.33 |   88.88 | 9-10                                                                                                      
+  api.js                  |    30.9 |    64.28 |   23.07 |    30.9 | 23,41,50-81,88-137                                                                                        
+  authService.js          |     100 |       50 |     100 |     100 | 10                                                                                                        
+--------------------------|---------|----------|---------|---------|-----------------------------------------------------------------------------------------------------------
