@@ -1,52 +1,37 @@
+
 import '@testing-library/jest-dom';
 
-// Mock localStorage
-const localStorageMock = (() => {
-  let store = {};
-  return {
-    getItem: (key) => store[key] || null,
-    setItem: (key, value) => {
-      store[key] = value.toString();
-    },
-    removeItem: (key) => {
-      delete store[key];
-    },
-    clear: () => {
-      store = {};
-    }
-  };
-})();
+// Mock alert and confirm
+global.alert = jest.fn();
+global.confirm = jest.fn(() => true);
 
-Object.defineProperty(window, 'localStorage', {
-  value: localStorageMock
+// Suppress React Router warnings
+const originalWarn = console.warn;
+console.warn = (...args) => {
+  if (typeof args[0] === 'string' && args[0].includes('React Router')) {
+    return;
+  }
+  originalWarn(...args);
+};
+
+// Suppress specific console errors from tests
+const originalError = console.error;
+console.error = (...args) => {
+  // Suppress "Not implemented: window.alert" error
+  if (typeof args[0] === 'string' && args[0].includes('Not implemented: window.alert')) {
+    return;
+  }
+  // Suppress login errors
+  if (typeof args[0] === 'string' && args[0].includes('Login error')) {
+    return;
+  }
+  // Suppress activity form errors
+  if (typeof args[0] === 'string' && args[0].includes('Error adding activity')) {
+    return;
+  }
+  originalError(...args);
+};
+
+beforeEach(() => {
+  jest.clearAllMocks();
 });
-
-// Mock fetch
-global.fetch = jest.fn();
-
-// Mock window methods
-window.confirm = jest.fn();
-window.alert = jest.fn();
-window.scrollTo = jest.fn();
-
-// Mock matchMedia
-Object.defineProperty(window, 'matchMedia', {
-  writable: true,
-  value: jest.fn().mockImplementation(query => ({
-    matches: false,
-    media: query,
-    onchange: null,
-    addListener: jest.fn(),
-    removeListener: jest.fn(),
-    addEventListener: jest.fn(),
-    removeEventListener: jest.fn(),
-    dispatchEvent: jest.fn(),
-  })),
-});
-
-// Mock ResizeObserver
-global.ResizeObserver = jest.fn().mockImplementation(() => ({
-  observe: jest.fn(),
-  unobserve: jest.fn(),
-  disconnect: jest.fn(),
-}));

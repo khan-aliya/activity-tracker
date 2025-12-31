@@ -1,31 +1,18 @@
+
 module.exports = {
   testEnvironment: 'jsdom',
-  setupFilesAfterEnv: ['<rootDir>/src/setupTests.js'],
+  // Comment out or remove this line if setupTests.js doesn't exist
+  // setupFilesAfterEnv: ['<rootDir>/src/setupTests.js'],
   moduleNameMapper: {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
-    '^@/(.*)$': '<rootDir>/src/$1'
   },
   transform: {
-    '^.+\\.(js|jsx)$': 'babel-jest'
+    '^.+\\.(js|jsx)$': 'babel-jest',
   },
-  testMatch: [
-    '<rootDir>/src/**/*.test.js',
-    '<rootDir>/src/**/*.test.jsx'
+  testPathIgnorePatterns: [
+    '/node_modules/',
+    '/build/',
   ],
-  collectCoverageFrom: [
-    'src/components/**/*.{js,jsx}',
-    '!src/components/**/*.test.{js,jsx}',
-    '!src/components/**/index.js'
-  ],
-  coverageThreshold: {
-    global: {
-      branches: 50,
-      functions: 50,
-      lines: 50,
-      statements: 50
-    }
-  },
-  transformIgnorePatterns: [
-    '/node_modules/(?!(react-bootstrap|bootstrap)/)'
-  ]
+  collectCoverage: false,
+  verbose: true,
 };

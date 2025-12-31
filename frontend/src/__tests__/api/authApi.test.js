@@ -1,4 +1,4 @@
-import axios from 'axios';
+import api from '../../services/api';
 import MockAdapter from 'axios-mock-adapter';
 import { 
   registerUser, 
@@ -7,14 +7,17 @@ import {
   getCurrentUser 
 } from '../../services/authService';
 
-const mock = new MockAdapter(axios);
+const mock = new MockAdapter(api);
 
 describe('Auth API Tests', () => {
   const BASE_URL = 'http://localhost:8000/api';
 
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
   afterEach(() => {
     mock.reset();
-    localStorage.clear();
   });
 
   test('registerUser should make POST request and return user data', async () => {
@@ -34,7 +37,8 @@ describe('Auth API Tests', () => {
       token: 'fake-jwt-token'
     };
 
-    mock.onPost(`${BASE_URL}/register`).reply(200, mockResponse);
+    // FIX: Use correct endpoint path
+    mock.onPost(`${BASE_URL}/auth/register`).reply(200, mockResponse);
 
     const response = await registerUser(mockUser);
 
@@ -59,7 +63,8 @@ describe('Auth API Tests', () => {
       token: 'fake-jwt-token'
     };
 
-    mock.onPost(`${BASE_URL}/login`).reply(200, mockResponse);
+    // FIX: Use correct endpoint path
+    mock.onPost(`${BASE_URL}/auth/login`).reply(200, mockResponse);
 
     const response = await loginUser(credentials);
 
@@ -70,7 +75,8 @@ describe('Auth API Tests', () => {
   test('logoutUser should make POST request and clear token', async () => {
     localStorage.setItem('token', 'existing-token');
     
-    mock.onPost(`${BASE_URL}/logout`).reply(200, {
+    // FIX: Mock the logout endpoint
+    mock.onPost(`${BASE_URL}/auth/logout`).reply(200, {
       status: 'success',
       message: 'Logged out successfully'
     });
@@ -90,7 +96,8 @@ describe('Auth API Tests', () => {
       email: 'test@example.com'
     };
 
-    mock.onGet(`${BASE_URL}/user`).reply(200, mockUser);
+    // FIX: Use correct endpoint path
+    mock.onGet(`${BASE_URL}/auth/me`).reply(200, mockUser);
 
     const response = await getCurrentUser();
 
@@ -99,7 +106,7 @@ describe('Auth API Tests', () => {
   });
 
   test('should handle network errors', async () => {
-    mock.onPost(`${BASE_URL}/login`).networkError();
+    mock.onPost(`${BASE_URL}/auth/login`).networkError();
 
     await expect(loginUser({ email: 'test@example.com', password: 'password' }))
       .rejects
@@ -107,13 +114,15 @@ describe('Auth API Tests', () => {
   });
 
   test('should handle 401 unauthorized', async () => {
-    mock.onPost(`${BASE_URL}/login`).reply(401, {
+    mock.onPost(`${BASE_URL}/auth/login`).reply(401, {
       status: 'error',
       message: 'Invalid credentials'
     });
 
     try {
       await loginUser({ email: 'wrong@example.com', password: 'wrong' });
+      // Fail test if no error is thrown
+      expect(true).toBe(false);
     } catch (error) {
       expect(error.response.status).toBe(401);
       expect(error.response.data.message).toBe('Invalid credentials');

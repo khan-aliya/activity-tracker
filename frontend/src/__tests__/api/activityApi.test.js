@@ -1,4 +1,4 @@
-import axios from 'axios';
+import api from '../../services/api';
 import MockAdapter from 'axios-mock-adapter';
 import {
   fetchActivities,
@@ -8,7 +8,7 @@ import {
   getActivitySummary
 } from '../../services/activityService';
 
-const mock = new MockAdapter(axios);
+const mock = new MockAdapter(api);
 
 describe('Activity API Tests', () => {
   const BASE_URL = 'http://localhost:8000/api';
