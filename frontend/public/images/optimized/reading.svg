@@ -1,0 +1,6 @@
+<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="300" fill="#2196F3" rx="15"/>
+    <text x="200" y="120" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="48">📚</text>
+    <text x="200" y="180" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="24" font-weight="bold">READING</text>
+    <text x="200" y="220" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-family="Arial, sans-serif" font-size="14">Track your reading activities</text>
+  </svg>

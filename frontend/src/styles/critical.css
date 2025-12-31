@@ -1,0 +1,22 @@
+/* Critical CSS - Loads before Bootstrap */
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+}
+
+/* Loading spinner */
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
+/* Navbar placeholder */
+.navbar-placeholder {
+  background: #f8f9fa;
+}
