@@ -1,13 +1,19 @@
-test('1 + 1 equals 2', () => {
+import { describe, test, expect } from '@jest/globals';
+
+describe('Simple test suite', () => {
+  test('should pass basic test', () => {
     expect(1 + 1).toBe(2);
-});
+  });
 
-test('true is truthy', () => {
-    expect(true).toBeTruthy();
-});
+  test('should handle arrays', () => {
+    const arr = [1, 2, 3];
+    expect(arr).toHaveLength(3);
+    expect(arr).toContain(2);
+  });
 
-test('object assignment', () => {
-    const data = { one: 1 };
-    data['two'] = 2;
-    expect(data).toEqual({ one: 1, two: 2 });
+  test('should handle objects', () => {
+    const obj = { name: 'test', value: 123 };
+    expect(obj).toHaveProperty('name');
+    expect(obj.name).toBe('test');
+  });
 });
