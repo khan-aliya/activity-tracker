@@ -6,11 +6,11 @@ use MongoDB\Laravel\Eloquent\Model as Eloquent;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class User extends Eloquent implements AuthenticatableContract
 {
-    use Authenticatable, Notifiable;
-    // REMOVE: HasApiTokens - we're not using Sanctum anymore
+    use Authenticatable, Notifiable, HasFactory;
 
     protected $connection = 'mongodb';
     protected $collection = 'users';

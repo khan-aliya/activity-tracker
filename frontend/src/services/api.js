@@ -31,15 +31,7 @@ api.interceptors.response.use(
         if (error.response?.status === 401) {
             localStorage.removeItem('token');
             localStorage.removeItem('user');
-        // Check if we're in a test environment
-      const isTestEnv = typeof process !== 'undefined' && 
-                       process.env && 
-                       (process.env.NODE_ENV === 'test' || 
-                        process.env.JEST_WORKER_ID !== undefined);
-      
-      if (!isTestEnv && typeof window !== 'undefined' && window.location) {
-        window.location.href = '/login';
-      }
+            window.location.href = '/login';
         }
         return Promise.reject(error);
     }

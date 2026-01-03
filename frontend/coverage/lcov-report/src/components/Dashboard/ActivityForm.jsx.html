@@ -323,14 +323,7 @@
 <a name='L258'></a><a href='#L258'>258</a>
 <a name='L259'></a><a href='#L259'>259</a>
 <a name='L260'></a><a href='#L260'>260</a>
-<a name='L261'></a><a href='#L261'>261</a>
-<a name='L262'></a><a href='#L262'>262</a>
-<a name='L263'></a><a href='#L263'>263</a>
-<a name='L264'></a><a href='#L264'>264</a>
-<a name='L265'></a><a href='#L265'>265</a>
-<a name='L266'></a><a href='#L266'>266</a>
-<a name='L267'></a><a href='#L267'>267</a>
-<a name='L268'></a><a href='#L268'>268</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L261'></a><a href='#L261'>261</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -463,7 +456,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">78x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -484,17 +476,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">182x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -709,9 +695,8 @@ const ActivityForm = ({ onActivityAdded }) =&gt; {
                     &lt;Row&gt;
                         &lt;Col md={6}&gt;
                             &lt;Form.Group className="mb-3"&gt;
-                                &lt;Form.Label htmlFor="title"&gt;Activity Title *&lt;/Form.Label&gt;
+                                &lt;Form.Label&gt;Activity Title *&lt;/Form.Label&gt;
                                 &lt;Form.Control
-                                    id="title"
                                     type="text"
                                     name="title"
                                     value={formData.title}
@@ -728,8 +713,8 @@ const ActivityForm = ({ onActivityAdded }) =&gt; {
                         
                         &lt;Col md={6}&gt;
                             &lt;Form.Group className="mb-3"&gt;
-                                &lt;Form.Label id="category-label"&gt;Category *&lt;/Form.Label&gt;
-                                &lt;div className="d-flex gap-2 flex-wrap" role="group" aria-labelledby="category-label"&gt;
+                                &lt;Form.Label&gt;Category *&lt;/Form.Label&gt;
+                                &lt;div className="d-flex gap-2 flex-wrap"&gt;
                                     {Object.keys(categories).map((cat) =&gt; (
                                         &lt;Button
                                             key={cat}
@@ -738,7 +723,6 @@ const ActivityForm = ({ onActivityAdded }) =&gt; {
                                             onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >handleCategoryChange(cat)}</span>
                                             className="flex-grow-1"
                                             disabled={loading}
-                                            aria-pressed={formData.category === cat}
                                         &gt;
                                             {cat}
                                         &lt;/Button&gt;
@@ -749,8 +733,8 @@ const ActivityForm = ({ onActivityAdded }) =&gt; {
                     &lt;/Row&gt;
 &nbsp;
                     &lt;Form.Group className="mb-3"&gt;
-                        &lt;Form.Label id="subcategory-label"&gt;Sub Category *&lt;/Form.Label&gt;
-                        &lt;div className="d-flex flex-wrap gap-2" role="group" aria-labelledby="subcategory-label"&gt;
+                        &lt;Form.Label&gt;Sub Category *&lt;/Form.Label&gt;
+                        &lt;div className="d-flex flex-wrap gap-2"&gt;
                             {categories[formData.category].subCategories.map((sub) =&gt; (
                                 &lt;Button
                                     key={sub}
@@ -758,7 +742,6 @@ const ActivityForm = ({ onActivityAdded }) =&gt; {
                                     variant={formData.sub_category === sub ? categories[formData.category].color : 'outline-' + categories[formData.category].color}
                                     onClick={() =&gt; handleSubCategoryChange(sub)}
                                     disabled={loading}
-                                    aria-pressed={formData.sub_category === sub}
                                 &gt;
                                     {sub}
                                 &lt;/Button&gt;
@@ -769,9 +752,8 @@ const ActivityForm = ({ onActivityAdded }) =&gt; {
                     &lt;Row&gt;
                         &lt;Col md={6}&gt;
                             &lt;Form.Group className="mb-3"&gt;
-                                &lt;Form.Label htmlFor="duration"&gt;Duration: {formData.duration} minutes *&lt;/Form.Label&gt;
+                                &lt;Form.Label&gt;Duration: {formData.duration} minutes *&lt;/Form.Label&gt;
                                 &lt;Form.Range
-                                    id="duration"
                                     name="duration"
                                     value={formData.duration}
                                     onChange={handleChange}
@@ -789,9 +771,8 @@ const ActivityForm = ({ onActivityAdded }) =&gt; {
                         
                         &lt;Col md={6}&gt;
                             &lt;Form.Group className="mb-3"&gt;
-                                &lt;Form.Label htmlFor="date"&gt;Date *&lt;/Form.Label&gt;
+                                &lt;Form.Label&gt;Date *&lt;/Form.Label&gt;
                                 &lt;Form.Control
-                                    id="date"
                                     type="date"
                                     name="date"
                                     value={formData.date}
@@ -804,9 +785,8 @@ const ActivityForm = ({ onActivityAdded }) =&gt; {
                     &lt;/Row&gt;
 &nbsp;
                     &lt;Form.Group className="mb-3"&gt;
-                        &lt;Form.Label htmlFor="feeling"&gt;How are you feeling? ({formData.feeling}/10) *&lt;/Form.Label&gt;
+                        &lt;Form.Label&gt;How are you feeling? ({formData.feeling}/10) *&lt;/Form.Label&gt;
                         &lt;Form.Range
-                            id="feeling"
                             name="feeling"
                             value={formData.feeling}
                             onChange={handleChange}
@@ -830,9 +810,8 @@ const ActivityForm = ({ onActivityAdded }) =&gt; {
                     &lt;/Form.Group&gt;
 &nbsp;
                     &lt;Form.Group className="mb-4"&gt;
-                        &lt;Form.Label htmlFor="notes"&gt;Notes&lt;/Form.Label&gt;
+                        &lt;Form.Label&gt;Notes&lt;/Form.Label&gt;
                         &lt;Form.Control
-                            id="notes"
                             as="textarea"
                             name="notes"
                             value={formData.notes}
@@ -871,7 +850,7 @@ export default ActivityForm;</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-31T23:36:10.332Z
+                at 2026-01-03T04:05:00.578Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

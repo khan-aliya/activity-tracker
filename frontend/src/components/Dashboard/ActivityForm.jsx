@@ -110,9 +110,8 @@ const ActivityForm = ({ onActivityAdded }) => {
                     <Row>
                         <Col md={6}>
                             <Form.Group className="mb-3">
-                                <Form.Label htmlFor="title">Activity Title *</Form.Label>
+                                <Form.Label>Activity Title *</Form.Label>
                                 <Form.Control
-                                    id="title"
                                     type="text"
                                     name="title"
                                     value={formData.title}
@@ -129,8 +128,8 @@ const ActivityForm = ({ onActivityAdded }) => {
                         
                         <Col md={6}>
                             <Form.Group className="mb-3">
-                                <Form.Label id="category-label">Category *</Form.Label>
-                                <div className="d-flex gap-2 flex-wrap" role="group" aria-labelledby="category-label">
+                                <Form.Label>Category *</Form.Label>
+                                <div className="d-flex gap-2 flex-wrap">
                                     {Object.keys(categories).map((cat) => (
                                         <Button
                                             key={cat}
@@ -139,7 +138,6 @@ const ActivityForm = ({ onActivityAdded }) => {
                                             onClick={() => handleCategoryChange(cat)}
                                             className="flex-grow-1"
                                             disabled={loading}
-                                            aria-pressed={formData.category === cat}
                                         >
                                             {cat}
                                         </Button>
@@ -150,8 +148,8 @@ const ActivityForm = ({ onActivityAdded }) => {
                     </Row>
 
                     <Form.Group className="mb-3">
-                        <Form.Label id="subcategory-label">Sub Category *</Form.Label>
-                        <div className="d-flex flex-wrap gap-2" role="group" aria-labelledby="subcategory-label">
+                        <Form.Label>Sub Category *</Form.Label>
+                        <div className="d-flex flex-wrap gap-2">
                             {categories[formData.category].subCategories.map((sub) => (
                                 <Button
                                     key={sub}
@@ -159,7 +157,6 @@ const ActivityForm = ({ onActivityAdded }) => {
                                     variant={formData.sub_category === sub ? categories[formData.category].color : 'outline-' + categories[formData.category].color}
                                     onClick={() => handleSubCategoryChange(sub)}
                                     disabled={loading}
-                                    aria-pressed={formData.sub_category === sub}
                                 >
                                     {sub}
                                 </Button>
@@ -170,9 +167,8 @@ const ActivityForm = ({ onActivityAdded }) => {
                     <Row>
                         <Col md={6}>
                             <Form.Group className="mb-3">
-                                <Form.Label htmlFor="duration">Duration: {formData.duration} minutes *</Form.Label>
+                                <Form.Label>Duration: {formData.duration} minutes *</Form.Label>
                                 <Form.Range
-                                    id="duration"
                                     name="duration"
                                     value={formData.duration}
                                     onChange={handleChange}
@@ -190,9 +186,8 @@ const ActivityForm = ({ onActivityAdded }) => {
                         
                         <Col md={6}>
                             <Form.Group className="mb-3">
-                                <Form.Label htmlFor="date">Date *</Form.Label>
+                                <Form.Label>Date *</Form.Label>
                                 <Form.Control
-                                    id="date"
                                     type="date"
                                     name="date"
                                     value={formData.date}
@@ -205,9 +200,8 @@ const ActivityForm = ({ onActivityAdded }) => {
                     </Row>
 
                     <Form.Group className="mb-3">
-                        <Form.Label htmlFor="feeling">How are you feeling? ({formData.feeling}/10) *</Form.Label>
+                        <Form.Label>How are you feeling? ({formData.feeling}/10) *</Form.Label>
                         <Form.Range
-                            id="feeling"
                             name="feeling"
                             value={formData.feeling}
                             onChange={handleChange}
@@ -231,9 +225,8 @@ const ActivityForm = ({ onActivityAdded }) => {
                     </Form.Group>
 
                     <Form.Group className="mb-4">
-                        <Form.Label htmlFor="notes">Notes</Form.Label>
+                        <Form.Label>Notes</Form.Label>
                         <Form.Control
-                            id="notes"
                             as="textarea"
                             name="notes"
                             value={formData.notes}

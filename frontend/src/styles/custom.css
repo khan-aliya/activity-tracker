@@ -146,6 +146,10 @@
   background-clip: text;
 }
 
+.register-card-body {
+  padding: 2rem !important;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .content-area.with-sidebar {
@@ -169,3 +173,4 @@
 .dashboard-container {
     padding-top: 3em !important;
 }
+

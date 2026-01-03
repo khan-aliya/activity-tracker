@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">72.22% </span>
+                <span class="strong">72.72% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>26/36</span>
+                <span class='fraction'>24/33</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">50% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>16/32</span>
+                <span class='fraction'>10/20</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">72.22% </span>
+                <span class="strong">72.72% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>26/36</span>
+                <span class='fraction'>24/33</span>
             </div>
         
             
@@ -261,14 +261,7 @@
 <a name='L196'></a><a href='#L196'>196</a>
 <a name='L197'></a><a href='#L197'>197</a>
 <a name='L198'></a><a href='#L198'>198</a>
-<a name='L199'></a><a href='#L199'>199</a>
-<a name='L200'></a><a href='#L200'>200</a>
-<a name='L201'></a><a href='#L201'>201</a>
-<a name='L202'></a><a href='#L202'>202</a>
-<a name='L203'></a><a href='#L203'>203</a>
-<a name='L204'></a><a href='#L204'>204</a>
-<a name='L205'></a><a href='#L205'>205</a>
-<a name='L206'></a><a href='#L206'>206</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L199'></a><a href='#L199'>199</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -315,22 +308,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -519,24 +505,17 @@ const Login = () =&gt; {
 <span class="cstat-no" title="statement not covered" >                    setError(result.message || 'Login failed. Please try again.');</span>
                 }
             }
-        
-} catch (err) {
-  console.error('Login error:', err);
-  
-  let errorMessage = 'An error occurred during login';
-  
-  // Fix: Check if err exists before accessing properties
-  <span class="missing-if-branch" title="if path not taken" >I</span>if (err &amp;&amp; err.response &amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >err.response.data </span>&amp;&amp; <span class="branch-3 cbranch-no" title="branch not covered" >err.response.data.errors)</span> {
-    const errorMessages = <span class="cstat-no" title="statement not covered" >Object.values(err.response.data.errors).flat();</span>
-<span class="cstat-no" title="statement not covered" >    errorMessage = errorMessages.join(', ');</span>
-  } else <span class="missing-if-branch" title="if path not taken" >I</span>if (err &amp;&amp; err.response &amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >err.response.data </span>&amp;&amp; <span class="branch-3 cbranch-no" title="branch not covered" >err.response.data.message)</span> {
-<span class="cstat-no" title="statement not covered" >    errorMessage = err.response.data.message;</span>
-  } else <span class="missing-if-branch" title="else path not taken" >E</span>if (err &amp;&amp; err.message) {
-    errorMessage = err.message;
-  }
-  
-  setError(errorMessage);
-} finally {
+        } catch (err) {
+            console.error('Login error:', err);
+            <span class="missing-if-branch" title="if path not taken" >I</span>if (err.response?.data?.errors) {
+                const errorMessages = <span class="cstat-no" title="statement not covered" >Object.values(err.response.data.errors).flat();</span>
+<span class="cstat-no" title="statement not covered" >                setError(errorMessages.join(', '));</span>
+            } else if (err.response?.data?.message) {
+                setError(err.response.data.message);
+            } else {
+                setError('Login failed. Please check your connection and try again.');
+            }
+        } finally {
             setLoading(false);
         }
     };
@@ -685,7 +664,7 @@ export default Login;</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-31T23:36:10.332Z
+                at 2026-01-03T04:05:00.578Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

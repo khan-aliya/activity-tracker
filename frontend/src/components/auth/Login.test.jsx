@@ -1,12 +1,15 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Login from './Login';
+
+// Stable navigate mock
+const mockNavigate = jest.fn();
 
 // Mock react-router-dom
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useNavigate: () => jest.fn(),
+  useNavigate: () => mockNavigate,
   Link: ({ children, ...props }) => <a {...props}>{children}</a>
 }));
 
@@ -23,35 +26,34 @@ describe('Login Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     mockLogin.mockClear();
+    mockNavigate.mockClear();
   });
 
   test('renders Login form', () => {
     render(<Login />);
     
-    // Use getAllByText for multiple matches
     const signInElements = screen.getAllByText(/Sign In/i);
     expect(signInElements.length).toBeGreaterThan(0);
     
-    // Check for form elements using more specific selectors
     expect(screen.getByPlaceholderText(/name@example.com/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/Enter your password/i)).toBeInTheDocument();
     
-    // Check for submit button by type
     const submitButton = screen.getByRole('button', { name: /Sign In/i });
     expect(submitButton).toBeInTheDocument();
     
     expect(screen.getByText(/Don't have an account/i)).toBeInTheDocument();
   });
 
-  test('handles form input changes', () => {
+  test('handles form input changes', async () => {
     render(<Login />);
     
-    // Use getByPlaceholderText instead of getByLabelText
     const emailInput = screen.getByPlaceholderText(/name@example.com/i);
     const passwordInput = screen.getByPlaceholderText(/Enter your password/i);
     
-    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
-    fireEvent.change(passwordInput, { target: { value: 'password123' } });
+    await act(async () => {
+      fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+      fireEvent.change(passwordInput, { target: { value: 'password123' } });
+    });
     
     expect(emailInput.value).toBe('test@example.com');
     expect(passwordInput.value).toBe('password123');
@@ -59,17 +61,16 @@ describe('Login Component', () => {
 
   test('submits form with valid data', async () => {
     mockLogin.mockResolvedValueOnce({});
-    
+
     render(<Login />);
     
     const emailInput = screen.getByPlaceholderText(/name@example.com/i);
     const passwordInput = screen.getByPlaceholderText(/Enter your password/i);
     const submitButton = screen.getByRole('button', { name: /Sign In/i });
     
-    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
-    fireEvent.change(passwordInput, { target: { value: 'password123' } });
-    
-    await waitFor(() => {
+    await act(async () => {
+      fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+      fireEvent.change(passwordInput, { target: { value: 'password123' } });
       fireEvent.click(submitButton);
     });
     
@@ -90,7 +91,12 @@ describe('Login Component', () => {
   });
 
   test('handles login errors', async () => {
-    mockLogin.mockRejectedValueOnce(new Error('Invalid credentials'));
+    // Mock API-style error (matches your backend)
+    mockLogin.mockRejectedValueOnce({
+      response: {
+        data: { message: 'Invalid credentials' }
+      }
+    });
     
     render(<Login />);
     
@@ -98,21 +104,18 @@ describe('Login Component', () => {
     const passwordInput = screen.getByPlaceholderText(/Enter your password/i);
     const submitButton = screen.getByRole('button', { name: /Sign In/i });
     
-    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
-    fireEvent.change(passwordInput, { target: { value: 'wrongpassword' } });
-    
-    await waitFor(() => {
+    await act(async () => {
+      fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+      fireEvent.change(passwordInput, { target: { value: 'wrongpassword' } });
       fireEvent.click(submitButton);
     });
     
-    // Since the component might handle errors differently, just verify the call was made
     expect(mockLogin).toHaveBeenCalled();
   });
 
   test('has register link', () => {
     render(<Login />);
     
-    // The register link might be a button with text "Create New Account"
     const registerButton = screen.getByText(/Create New Account/i);
     expect(registerButton).toBeInTheDocument();
   });

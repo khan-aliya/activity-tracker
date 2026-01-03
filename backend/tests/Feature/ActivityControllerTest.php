@@ -66,7 +66,6 @@ class ActivityControllerTest extends TestCase
         $this->assertTrue(method_exists($controller, 'show'));
         $this->assertTrue(method_exists($controller, 'update'));
         $this->assertTrue(method_exists($controller, 'destroy'));
-        $this->assertTrue(method_exists($controller, 'getCategories'));
-        $this->assertTrue(method_exists($controller, 'getStats') || true); // Optional method
+        $this->assertTrue(method_exists($controller, 'categories'));
     }
 }

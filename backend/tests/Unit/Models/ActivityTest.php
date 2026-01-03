@@ -46,7 +46,8 @@ class ActivityTest extends TestCase
         $this->assertEquals('Test', $activity->title);
         $this->assertEquals('Self-care', $activity->category);
         $this->assertEquals(30, $activity->duration);
-        $this->assertEquals('2024-01-15', $activity->date);
+        $this->assertEquals('2024-01-15', $activity->date->format('Y-m-d'));
+
     }
 
     /** @test */

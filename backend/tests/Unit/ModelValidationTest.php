@@ -40,10 +40,11 @@ class ModelValidationTest extends TestCase
     public function activity_model_has_correct_casts()
     {
         $casts = [
-            'duration' => 'integer',
-            'feeling' => 'integer',
-            'date' => 'date'
-        ];
+    'duration' => 'integer',
+    'feeling' => 'integer',
+    'date' => 'date',
+];
+
         $activity = new Activity();
         
         $this->assertEquals($casts, $activity->getCasts());

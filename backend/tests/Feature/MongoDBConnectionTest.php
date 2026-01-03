@@ -12,7 +12,8 @@ class MongoDBConnectionTest extends TestCase
     {
         try {
             $connection = DB::connection('mongodb');
-            $this->assertTrue($connection->getDatabaseName() === 'activity_tracker_test');
+            $this->assertEquals(env('DB_DATABASE'), $connection->getDatabaseName());
+
             echo "✓ MongoDB connected successfully to: " . $connection->getDatabaseName() . "\n";
         } catch (\Exception $e) {
             $this->fail("Could not connect to MongoDB: " . $e->getMessage());

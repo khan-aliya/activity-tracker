@@ -44,24 +44,17 @@ const Login = () => {
                     setError(result.message || 'Login failed. Please try again.');
                 }
             }
-        
-} catch (err) {
-  console.error('Login error:', err);
-  
-  let errorMessage = 'An error occurred during login';
-  
-  // Fix: Check if err exists before accessing properties
-  if (err && err.response && err.response.data && err.response.data.errors) {
-    const errorMessages = Object.values(err.response.data.errors).flat();
-    errorMessage = errorMessages.join(', ');
-  } else if (err && err.response && err.response.data && err.response.data.message) {
-    errorMessage = err.response.data.message;
-  } else if (err && err.message) {
-    errorMessage = err.message;
-  }
-  
-  setError(errorMessage);
-} finally {
+        } catch (err) {
+            console.error('Login error:', err);
+            if (err.response?.data?.errors) {
+                const errorMessages = Object.values(err.response.data.errors).flat();
+                setError(errorMessages.join(', '));
+            } else if (err.response?.data?.message) {
+                setError(err.response.data.message);
+            } else {
+                setError('Login failed. Please check your connection and try again.');
+            }
+        } finally {
             setLoading(false);
         }
     };

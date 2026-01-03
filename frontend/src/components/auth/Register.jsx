@@ -3,7 +3,7 @@ import { Form, Button, Card, Container, Alert, Row, Col } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom';
 import { FaUser, FaEnvelope, FaLock, FaUserPlus, FaChartLine, FaCheckCircle } from 'react-icons/fa';
 import { useAuth } from '../../contexts/AuthContext';
-
+import '../../styles/custom.css';
 const Register = () => {
     const [formData, setFormData] = useState({
         name: '',
@@ -115,7 +115,7 @@ const Register = () => {
                         {/* Right Column - Registration Form */}
                         <Col md={6}>
                             <Card className="border-0 shadow-lg rounded-3 h-100">
-                                <Card.Body className="p-4 p-md-5">
+                                <Card.Body className="p-4 p-md-5 register-card-body">
                                     <div className="text-center mb-4">
                                         <h3 className="fw-bold">Create Your Account</h3>
                                         <p className="text-muted">Fill in your details to get started</p>
@@ -169,47 +169,49 @@ const Register = () => {
                                             </Form.Text>
                                         </Form.Group>
 
-                                        <Row className="g-3 mb-4">
-                                            <Col md={6}>
-                                                <Form.Group>
-                                                    <Form.Label className="fw-semibold">
-                                                        <FaLock className="me-2" />
-                                                        Password
-                                                    </Form.Label>
-                                                    <Form.Control
-                                                        type="password"
-                                                        name="password"
-                                                        value={formData.password}
-                                                        onChange={handleChange}
-                                                        placeholder="Create password"
-                                                        required
-                                                        minLength="6"
-                                                        className="py-2"
-                                                    />
-                                                    <Form.Text className="text-muted">
-                                                        At least 6 characters
-                                                    </Form.Text>
-                                                </Form.Group>
-                                            </Col>
-                                            <Col md={6}>
-                                                <Form.Group>
-                                                    <Form.Label className="fw-semibold">
-                                                        <FaLock className="me-2" />
-                                                        Confirm Password
-                                                    </Form.Label>
-                                                    <Form.Control
-                                                        type="password"
-                                                        name="password_confirmation"
-                                                        value={formData.password_confirmation}
-                                                        onChange={handleChange}
-                                                        placeholder="Confirm password"
-                                                        required
-                                                        className="py-2"
-                                                    />
-                                                </Form.Group>
-                                            </Col>
-                                        </Row>
-
+<Row className="mb-4">
+    <Col lg={6} md={12} className="mb-3 mb-lg-0 pe-lg-3">
+        <Form.Group>
+            <Form.Label className="fw-semibold">
+                <FaLock className="me-2" style={{ fontSize: '1rem' }} />
+                Password
+            </Form.Label>
+            <Form.Control
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Create password"
+                required
+                minLength="6"
+                className="py-2"
+            />
+            <Form.Text className="text-muted">
+                At least 6 characters
+            </Form.Text>
+        </Form.Group>
+    </Col>
+    <Col lg={6} md={12} className="ps-lg-3">
+        <Form.Group>
+            <Form.Label className="fw-semibold">
+                <FaLock className="me-2" style={{ fontSize: '1rem' }} />
+                Confirm Password
+            </Form.Label>
+            <Form.Control
+                type="password"
+                name="password_confirmation"
+                value={formData.password_confirmation}
+                onChange={handleChange}
+                placeholder="Confirm password"
+                required
+                className="py-2"
+            />
+            <Form.Text className="text-muted invisible">
+                Placeholder for alignment
+            </Form.Text>
+        </Form.Group>
+    </Col>
+</Row>
                                         <Button 
                                             type="submit" 
                                             variant="primary"

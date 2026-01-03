@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Support\Facades\DB;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -11,11 +12,12 @@ abstract class TestCase extends BaseTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
-        // Disable middleware that might interfere with testing
-        // $this->withoutMiddleware();
-        
-        // Use SQLite for testing instead of MongoDB for simplicity
-        // We'll mock the MongoDB behavior
+
+        // Reset MongoDB before each test
+        try {
+            DB::connection('mongodb')->getMongoDB()->drop();
+        } catch (\Exception $e) {
+            // Ignore if MongoDB not ready
+        }
     }
 }
