@@ -3,69 +3,134 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use Illuminate\Http\Request;
-use App\Http\Controllers\ActivityController;
-use Illuminate\Support\Facades\Validator;
+use App\Models\User;
+use App\Models\Activity;
+
 
 class ActivityControllerTest extends TestCase
 {
-    /** @test */
-    public function activity_creation_validates_required_fields()
+    public function setUp(): void
+{
+    parent::setUp();
+
+    \App\Models\User::truncate();
+    \App\Models\Activity::truncate();
+}
+
+
+    private function authHeaders($user)
     {
-        $request = Request::create('/api/activities', 'POST', []);
-        
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
-            'category' => 'required|string',
-            'duration' => 'required|integer|min:1',
-            'date' => 'required|date',
-        ]);
-        
-        $this->assertTrue($validator->fails());
-        $this->assertArrayHasKey('title', $validator->errors()->toArray());
-        $this->assertArrayHasKey('category', $validator->errors()->toArray());
-        $this->assertArrayHasKey('duration', $validator->errors()->toArray());
-        $this->assertArrayHasKey('date', $validator->errors()->toArray());
+        return ['Authorization' => 'Bearer ' . $user->api_token];
     }
-    
-    /** @test */
-    public function activity_update_validates_fields()
+
+    public function test_index_requires_authentication()
     {
-        $request = Request::create('/api/activities/1', 'PUT', [
-            'duration' => 'not-a-number',
-            'feeling' => 10, // should be 1-5
-        ]);
-        
-        $validator = Validator::make($request->all(), [
-            'title' => 'sometimes|string|max:255',
-            'category' => 'sometimes|string',
-            'duration' => 'sometimes|integer|min:1',
-            'feeling' => 'sometimes|integer|min:1|max:5',
-            'date' => 'sometimes|date',
-        ]);
-        
-        $this->assertTrue($validator->fails());
-        $errors = $validator->errors()->toArray();
-        
-        if (isset($errors['duration'])) {
-            $this->assertArrayHasKey('duration', $errors);
-        }
-        if (isset($errors['feeling'])) {
-            $this->assertArrayHasKey('feeling', $errors);
-        }
+        $response = $this->getJson('/api/activities');
+        $response->assertStatus(401);
     }
-    
-    /** @test */
-    public function activity_controller_methods_exist()
+
+    public function test_index_filters_by_date_range()
     {
-        $controller = new ActivityController();
-        
-        // Check if methods exist
-        $this->assertTrue(method_exists($controller, 'index'));
-        $this->assertTrue(method_exists($controller, 'store'));
-        $this->assertTrue(method_exists($controller, 'show'));
-        $this->assertTrue(method_exists($controller, 'update'));
-        $this->assertTrue(method_exists($controller, 'destroy'));
-        $this->assertTrue(method_exists($controller, 'categories'));
+        $user = User::factory()->create(['api_token' => 'abc123']);
+
+        Activity::factory()->create([
+            'user_id' => $user->_id,
+            'date' => '2024-01-01'
+        ]);
+
+        Activity::factory()->create([
+            'user_id' => $user->_id,
+            'date' => '2024-02-01'
+        ]);
+
+        $response = $this->getJson('/api/activities?start_date=2024-01-01&end_date=2024-01-31', $this->authHeaders($user));
+
+        $response->assertStatus(200);
+        $this->assertCount(1, $response->json('data'));
+    }
+
+    public function test_store_validation_fails()
+    {
+        $user = User::factory()->create(['api_token' => 'abc123']);
+
+        $response = $this->postJson('/api/activities', [], $this->authHeaders($user));
+
+        $response->assertStatus(422);
+        $response->assertJsonStructure(['errors']);
+    }
+
+    public function test_store_creates_activity()
+    {
+        $user = User::factory()->create(['api_token' => 'abc123']);
+
+        $payload = [
+            'title' => 'Test Activity',
+            'category' => 'Self-care',
+            'sub_category' => 'Workout',
+            'duration' => 30,
+            'date' => '2024-01-01',
+            'feeling' => 5,
+        ];
+
+        $response = $this->postJson('/api/activities', $payload, $this->authHeaders($user));
+
+        $response->assertStatus(201);
+        $response->assertJsonStructure(['activity']);
+    }
+
+    public function test_show_returns_404_for_missing_activity()
+    {
+        $user = User::factory()->create(['api_token' => 'abc123']);
+
+        $response = $this->getJson('/api/activities/999', $this->authHeaders($user));
+
+        $response->assertStatus(404);
+    }
+
+    public function test_show_returns_403_for_wrong_user()
+    {
+        $user1 = User::factory()->create(['api_token' => 'abc123']);
+        $user2 = User::factory()->create(['api_token' => 'xyz789']);
+
+        $activity = Activity::factory()->create(['user_id' => $user1->_id]);
+
+        $response = $this->getJson('/api/activities/' . $activity->_id, $this->authHeaders($user2));
+
+        $response->assertStatus(403);
+    }
+
+    public function test_update_validation_fails()
+    {
+        $user = User::factory()->create(['api_token' => 'abc123']);
+        $activity = Activity::factory()->create(['user_id' => $user->_id]);
+
+        $response = $this->putJson('/api/activities/' . $activity->_id, [
+            'duration' => -10
+        ], $this->authHeaders($user));
+
+        $response->assertStatus(422);
+    }
+
+    public function test_update_works()
+    {
+        $user = User::factory()->create(['api_token' => 'abc123']);
+        $activity = Activity::factory()->create(['user_id' => $user->_id]);
+
+        $response = $this->putJson('/api/activities/' . $activity->_id, [
+            'title' => 'Updated Title'
+        ], $this->authHeaders($user));
+
+        $response->assertStatus(200);
+        $this->assertEquals('Updated Title', $response->json('activity.title'));
+    }
+
+    public function test_destroy_works()
+    {
+        $user = User::factory()->create(['api_token' => 'abc123']);
+        $activity = Activity::factory()->create(['user_id' => $user->_id]);
+
+        $response = $this->deleteJson('/api/activities/' . $activity->_id, [], $this->authHeaders($user));
+
+        $response->assertStatus(200);
     }
 }

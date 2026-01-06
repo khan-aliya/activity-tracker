@@ -15,13 +15,13 @@ class ActivityFactory extends Factory
         return [
             'user_id' => User::factory(),
             'title' => $this->faker->sentence(3),
-            'description' => $this->faker->paragraph(),
-            'type' => $this->faker->randomElement(['exercise', 'work', 'study', 'leisure']),
-            'duration' => $this->faker->numberBetween(15, 240),
-            'date' => $this->faker->dateTimeBetween('-1 month', 'now')->format('Y-m-d'),
-            'status' => $this->faker->randomElement(['completed', 'pending', 'cancelled']),
-            'created_at' => now(),
-            'updated_at' => now()
+            'category' => $this->faker->randomElement(['Self-care', 'Productivity', 'Reward']),
+            'sub_category' => 'Workout',
+            'duration' => $this->faker->numberBetween(1, 120),
+            'date' => now()->format('Y-m-d'),
+            'feeling' => $this->faker->numberBetween(1, 10),
+            'notes' => $this->faker->sentence(),
+            'status' => 'completed',
         ];
     }
 }

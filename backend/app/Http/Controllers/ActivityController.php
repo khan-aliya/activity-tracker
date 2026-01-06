@@ -187,42 +187,6 @@ public function index(Request $request)
         ]);
     }
 
-    // public function stats(Request $request)
-    // {
-    //     $user = $request->user();
-        
-    //     $totalActivities = Activity::where('user_id', $user->id)->count();
-    //     $totalDuration = Activity::where('user_id', $user->id)->sum('duration');
-    //     $averageFeeling = Activity::where('user_id', $user->id)->avg('feeling');
-
-    //     $byCategory = Activity::where('user_id', $user->id)
-    //         ->select('category')
-    //         ->selectRaw('count(*) as count, sum(duration) as total_duration')
-    //         ->groupBy('category')
-    //         ->get();
-
-    //     $recentActivities = Activity::where('user_id', $user->id)
-    //         ->orderBy('date', 'desc')
-    //         ->orderBy('created_at', 'desc')
-    //         ->limit(5)
-    //         ->get();
-
-    //     $weeklySummary = Activity::where('user_id', $user->id)
-    //         ->where('date', '>=', Carbon::now()->subDays(7))
-    //         ->selectRaw('DATE(date) as day, category, count(*) as count')
-    //         ->groupBy('day', 'category')
-    //         ->orderBy('day', 'desc')
-    //         ->get();
-
-    //     return response()->json([
-    //         'total_activities' => $totalActivities,
-    //         'total_duration' => $totalDuration,
-    //         'average_feeling' => round($averageFeeling, 2),
-    //         'by_category' => $byCategory,
-    //         'recent_activities' => $recentActivities,
-    //         'weekly_summary' => $weeklySummary
-    //     ]);
-    // }
 
     public function categories()
 {

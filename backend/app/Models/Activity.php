@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use MongoDB\Laravel\Eloquent\Model as Eloquent;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 
 class Activity extends Eloquent
 {
+    use HasFactory;
     protected $connection = 'mongodb';
     protected $collection = 'activities';
     

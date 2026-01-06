@@ -3,53 +3,104 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use Illuminate\Http\Request;
-use App\Http\Controllers\AuthController;
-use Illuminate\Support\Facades\Validator;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+
+
 
 class AuthControllerTest extends TestCase
 {
-    /** @test */
-    public function registration_validates_required_fields()
+    public function setUp(): void
+{
+    parent::setUp();
+
+    \App\Models\User::truncate();
+    \App\Models\Activity::truncate();
+}
+
+
+    public function test_login_requires_email_and_password()
     {
-        $request = Request::create('/api/register', 'POST', []);
-        
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
-        ]);
-        
-        $this->assertTrue($validator->fails());
-        $this->assertArrayHasKey('name', $validator->errors()->toArray());
-        $this->assertArrayHasKey('email', $validator->errors()->toArray());
-        $this->assertArrayHasKey('password', $validator->errors()->toArray());
+        $response = $this->postJson('/api/login', []);
+
+        $response->assertStatus(422);
+        $response->assertJson(['message' => 'Email and password are required']);
     }
-    
-    /** @test */
-    public function login_validates_required_fields()
+
+    public function test_login_fails_for_nonexistent_user()
     {
-        $request = Request::create('/api/login', 'POST', []);
-        
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'password' => 'required',
+        $response = $this->postJson('/api/login', [
+            'email' => 'missing@example.com',
+            'password' => 'password'
         ]);
-        
-        $this->assertTrue($validator->fails());
-        $this->assertArrayHasKey('email', $validator->errors()->toArray());
-        $this->assertArrayHasKey('password', $validator->errors()->toArray());
+
+        $response->assertStatus(401);
+        $response->assertJson(['message' => 'Invalid credentials']);
     }
-    
-    /** @test */
-    public function auth_controller_methods_exist()
+
+    public function test_login_fails_for_wrong_password()
     {
-        $controller = new AuthController();
-        
-        // Check if methods exist
-        $this->assertTrue(method_exists($controller, 'register'));
-        $this->assertTrue(method_exists($controller, 'login'));
-        $this->assertTrue(method_exists($controller, 'logout'));
-        $this->assertTrue(method_exists($controller, 'user'));
+        User::factory()->create([
+            'email' => 'test@example.com',
+            'password' => Hash::make('correct-password')
+        ]);
+
+        $response = $this->postJson('/api/login', [
+            'email' => 'test@example.com',
+            'password' => 'wrong-password'
+        ]);
+
+        $response->assertStatus(401);
+        $response->assertJson(['message' => 'Invalid credentials']);
+    }
+
+    public function test_login_succeeds()
+    {
+        $user = User::factory()->create([
+            'email' => 'test@example.com',
+            'password' => Hash::make('password123')
+        ]);
+
+        $response = $this->postJson('/api/login', [
+            'email' => 'test@example.com',
+            'password' => 'password123'
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure(['token']);
+    }
+
+    public function test_user_endpoint_requires_valid_token()
+    {
+        $response = $this->getJson('/api/user', [
+            'Authorization' => 'Bearer invalidtoken'
+        ]);
+
+        $response->assertStatus(401);
+    }
+
+    public function test_user_endpoint_returns_user()
+    {
+        $user = User::factory()->create(['api_token' => 'abc123']);
+
+        $response = $this->getJson('/api/user', [
+            'Authorization' => 'Bearer abc123'
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure(['user']);
+    }
+
+    public function test_logout_clears_token()
+    {
+        $user = User::factory()->create(['api_token' => 'abc123']);
+
+        $response = $this->postJson('/api/logout', [], [
+            'Authorization' => 'Bearer abc123'
+        ]);
+
+        $response->assertStatus(200);
+
+        $this->assertNull($user->fresh()->api_token);
     }
 }

@@ -7,69 +7,147 @@ describe('ActivityFilter Component', () => {
   const mockOnFilter = jest.fn();
 
   beforeEach(() => {
-    mockOnFilter.mockClear();
+    jest.clearAllMocks();
   });
 
-  test('renders ActivityFilter with basic controls', () => {
-    render(<ActivityFilter onFilter={mockOnFilter} />);
-    
-    expect(screen.getByText(/Filter Activities/i)).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/Search by title/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Apply/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Reset/i })).toBeInTheDocument();
+  describe('Basic Rendering', () => {
+    it('renders ActivityFilter with basic controls', () => {
+      render(<ActivityFilter onFilter={mockOnFilter} />);
+
+      expect(screen.getByText(/Filter Activities/i)).toBeInTheDocument();
+      expect(screen.getByPlaceholderText(/Search by title/i)).toBeInTheDocument();
+      expect(screen.getByDisplayValue(/All Categories/i)).toBeInTheDocument();
+      expect(screen.getByPlaceholderText(/Start Date/i)).toBeInTheDocument();
+      expect(screen.getByPlaceholderText(/End Date/i)).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Apply/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Reset/i })).toBeInTheDocument();
+      expect(screen.getByText(/Advanced Filters/i)).toBeInTheDocument();
+    });
+
+    it('shows advanced filters when toggled', () => {
+      render(<ActivityFilter onFilter={mockOnFilter} />);
+
+      // Advanced filters are inside details element, not visible by default
+      const detailsElement = screen.getByText(/Advanced Filters/i).closest('details');
+      expect(detailsElement).not.toHaveAttribute('open');
+      
+      // Click to open
+      fireEvent.click(screen.getByText(/Advanced Filters/i));
+      expect(detailsElement).toHaveAttribute('open');
+    });
   });
 
-  test('handles search input change', () => {
-    render(<ActivityFilter onFilter={mockOnFilter} />);
-    
-    const searchInput = screen.getByPlaceholderText(/Search by title/i);
-    fireEvent.change(searchInput, { target: { value: 'Yoga' } });
-    
-    expect(searchInput.value).toBe('Yoga');
+  describe('Filter Interactions', () => {
+    it('handles search input change', () => {
+      render(<ActivityFilter onFilter={mockOnFilter} />);
+
+      const searchInput = screen.getByPlaceholderText(/Search by title/i);
+      fireEvent.change(searchInput, { target: { value: 'Yoga' } });
+
+      expect(searchInput.value).toBe('Yoga');
+    });
+
+    it('handles category selection', () => {
+      render(<ActivityFilter onFilter={mockOnFilter} />);
+
+      const categorySelect = screen.getByDisplayValue(/All Categories/i);
+      fireEvent.change(categorySelect, { target: { value: 'Self-care' } });
+
+      expect(categorySelect.value).toBe('Self-care');
+    });
+
+    it('handles start date change', () => {
+      render(<ActivityFilter onFilter={mockOnFilter} />);
+
+      const startDateInput = screen.getByPlaceholderText(/Start Date/i);
+      fireEvent.change(startDateInput, { target: { value: '2023-12-01' } });
+
+      expect(startDateInput.value).toBe('2023-12-01');
+    });
   });
 
-  test('handles category selection', () => {
-    render(<ActivityFilter onFilter={mockOnFilter} />);
-    
-    // The select should have options
-    const selectElement = screen.getByDisplayValue(/All Categories/i);
-    expect(selectElement).toBeInTheDocument();
+  describe('Advanced Filters', () => {
+    beforeEach(() => {
+      render(<ActivityFilter onFilter={mockOnFilter} />);
+      
+      // Open advanced filters first
+      fireEvent.click(screen.getByText(/Advanced Filters/i));
+    });
+
+    it('handles min feeling filter', () => {
+      // Get by label text instead of placeholder
+      const minFeelingLabel = screen.getByText(/Min Feeling \(1-10\)/i);
+      const minFeelingInput = minFeelingLabel.nextElementSibling?.querySelector('input');
+      
+      if (minFeelingInput) {
+        fireEvent.change(minFeelingInput, { target: { value: '5' } });
+        expect(minFeelingInput.value).toBe('5');
+      } else {
+        // Alternative: find by type number and test label relationship
+        const numberInputs = screen.getAllByRole('spinbutton');
+        expect(numberInputs.length).toBeGreaterThan(0);
+        
+        // First number input should be min feeling
+        fireEvent.change(numberInputs[0], { target: { value: '5' } });
+        expect(numberInputs[0].value).toBe('5');
+      }
+    });
+
+    it('handles max feeling filter', () => {
+      // Get all number inputs and find the right one
+      const numberInputs = screen.getAllByRole('spinbutton');
+      
+      // Max feeling should be the second number input
+      expect(numberInputs.length).toBeGreaterThan(1);
+      
+      fireEvent.change(numberInputs[1], { target: { value: '8' } });
+      expect(numberInputs[1].value).toBe('8');
+    });
   });
 
-  test('applies filters when Apply button is clicked', () => {
-    render(<ActivityFilter onFilter={mockOnFilter} />);
-    
-    // Change search input
-    const searchInput = screen.getByPlaceholderText(/Search by title/i);
-    fireEvent.change(searchInput, { target: { value: 'Yoga' } });
-    
-    // Click Apply button
-    const applyButton = screen.getByRole('button', { name: /Apply/i });
-    fireEvent.click(applyButton);
-    
-    expect(mockOnFilter).toHaveBeenCalled();
+  describe('Filter Application', () => {
+    it('applies filters when Apply button is clicked', () => {
+      render(<ActivityFilter onFilter={mockOnFilter} />);
+
+      const searchInput = screen.getByPlaceholderText(/Search by title/i);
+      fireEvent.change(searchInput, { target: { value: 'Yoga' } });
+
+      const applyButton = screen.getByRole('button', { name: /Apply/i });
+      fireEvent.click(applyButton);
+
+      expect(mockOnFilter).toHaveBeenCalledWith(
+        expect.objectContaining({
+          search: 'Yoga',
+          category: 'all'
+        })
+      );
+    });
+
+    it('resets filters when Reset button is clicked', () => {
+      render(<ActivityFilter onFilter={mockOnFilter} />);
+
+      const searchInput = screen.getByPlaceholderText(/Search by title/i);
+      fireEvent.change(searchInput, { target: { value: 'Yoga' } });
+
+      const resetButton = screen.getByRole('button', { name: /Reset/i });
+      fireEvent.click(resetButton);
+
+      expect(searchInput.value).toBe('');
+      expect(mockOnFilter).toHaveBeenCalledWith(
+        expect.objectContaining({
+          search: '',
+          category: 'all'
+        })
+      );
+    });
   });
 
-  test('resets filters when Reset button is clicked', () => {
-    render(<ActivityFilter onFilter={mockOnFilter} />);
-    
-    // Change some filters
-    const searchInput = screen.getByPlaceholderText(/Search by title/i);
-    fireEvent.change(searchInput, { target: { value: 'Yoga' } });
-    
-    // Click Reset button
-    const resetButton = screen.getByRole('button', { name: /Reset/i });
-    fireEvent.click(resetButton);
-    
-    // Should call onFilter with reset values
-    expect(mockOnFilter).toHaveBeenCalled();
-  });
+  describe('Edge Cases', () => {
+    it('handles null or undefined initial filters', () => {
+      render(<ActivityFilter onFilter={mockOnFilter} initialFilters={null} />);
 
-  test('shows advanced filters toggle', () => {
-    render(<ActivityFilter onFilter={mockOnFilter} />);
-    
-    // Check for advanced filters toggle
-    const advancedFiltersToggle = screen.getByText(/Advanced Filters/i);
-    expect(advancedFiltersToggle).toBeInTheDocument();
+      expect(screen.getByText(/Filter Activities/i)).toBeInTheDocument();
+      expect(screen.getByPlaceholderText(/Search by title/i).value).toBe('');
+    });
   });
 });

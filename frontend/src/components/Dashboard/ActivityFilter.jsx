@@ -1,20 +1,21 @@
 import { useState } from 'react';
 import { Form, Button, Row, Col, Card } from 'react-bootstrap';
 
-const ActivityFilter = ({ onFilter, initialFilters = {} }) => {
-    const [filters, setFilters] = useState({
-        search: initialFilters.search || '',
-        category: initialFilters.category || 'all',
-        sub_category: initialFilters.sub_category || 'all',
-        start_date: initialFilters.start_date || '',
-        end_date: initialFilters.end_date || '',
-        min_feeling: initialFilters.min_feeling || '',
-        max_feeling: initialFilters.max_feeling || '',
-        min_duration: initialFilters.min_duration || '',
-        max_duration: initialFilters.max_duration || '',
-        sort_by: initialFilters.sort_by || 'date',
-        sort_order: initialFilters.sort_order || 'desc'
-    });
+const ActivityFilter = ({ onFilter, initialFilters }) => {
+  
+  const safeFilters = initialFilters || {};
+  
+  const [filters, setFilters] = useState({
+    search: safeFilters.search || '',
+    category: safeFilters.category || 'all',
+    sub_category: safeFilters.sub_category || 'all',
+    start_date: safeFilters.start_date || '',
+    end_date: safeFilters.end_date || '',
+    min_feeling: safeFilters.min_feeling || '',
+    max_feeling: safeFilters.max_feeling || '',
+    min_duration: safeFilters.min_duration || '',
+    max_duration: safeFilters.max_duration || '',
+  });
 
     const categories = {
         'all': 'All Categories',

@@ -1,18 +1,30 @@
-
 module.exports = {
   testEnvironment: 'jsdom',
-  // Comment out or remove this line if setupTests.js doesn't exist
-  // setupFilesAfterEnv: ['<rootDir>/src/setupTests.js'],
+  setupFilesAfterEnv: ['<rootDir>/src/setupTests.js'],
   moduleNameMapper: {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+    '\\.(jpg|jpeg|png|gif|webp|svg)$': '<rootDir>/__mocks__/fileMock.js'
   },
-  transform: {
-    '^.+\\.(js|jsx)$': 'babel-jest',
-  },
-  testPathIgnorePatterns: [
-    '/node_modules/',
-    '/build/',
+  collectCoverageFrom: [
+    'src/**/*.{js,jsx,ts,tsx}',
+    '!src/**/*.d.ts',
+    '!src/index.js',
+    '!src/reportWebVitals.js',
+    '!src/setupTests.js'
   ],
-  collectCoverage: false,
-  verbose: true,
+  coverageThreshold: {
+    global: {
+      branches: 80,
+      functions: 80,
+      lines: 80,
+      statements: 80
+    }
+  },
+  coveragePathIgnorePatterns: [
+    '/node_modules/',
+    '/__tests__/',
+    '/__mocks__/'
+  ],
+  // Add testTimeout configuration
+  testTimeout: 15000, // 15 seconds default timeout
 };
