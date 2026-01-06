@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>11/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>9/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -293,17 +293,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">26x</span>
+<span class="cline-any cline-yes">26x</span>
+<span class="cline-any cline-yes">26x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">26x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">26x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -423,7 +423,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -432,7 +432,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -517,17 +517,17 @@ import { useAuth } from '../contexts/AuthContext';
 import ActivityForm from '../components/Dashboard/ActivityForm';
 import ActivityTable from '../components/Dashboard/ActivityTable';
 &nbsp;
-const DashboardPage = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const { user } = <span class="cstat-no" title="statement not covered" >useAuth();</span>
-    const [showForm, setShowForm] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
-    const [refreshTrigger, setRefreshTrigger] = <span class="cstat-no" title="statement not covered" >useState(0);</span>
+const DashboardPage = () =&gt; {
+    const { user } = useAuth();
+    const [showForm, setShowForm] = useState(false);
+    const [refreshTrigger, setRefreshTrigger] = useState(0);
 &nbsp;
-    const handleActivityAdded = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        setRefreshTrigger(<span class="fstat-no" title="function not covered" >pr</span>ev =&gt; <span class="cstat-no" title="statement not covered" >prev + 1)</span>;</span>
-<span class="cstat-no" title="statement not covered" >        setShowForm(false); </span>// Hide form after adding
+    const handleActivityAdded = () =&gt; {
+        setRefreshTrigger(prev =&gt; prev + 1);
+        setShowForm(false); // Hide form after adding
     };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return (</span>
+    return (
         &lt;Container fluid className="py-4 px-3 dashboard-container"&gt;
             {/* Header - Simplified */}
             &lt;Row className="mb-4"&gt;
@@ -647,7 +647,7 @@ const DashboardPage = <span class="cstat-no" title="statement not covered" ><spa
                                         &lt;Button 
                                             variant="primary" 
                                             size="sm"
-                                            onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setShowForm(true)}</span>
+                                            onClick={() =&gt; setShowForm(true)}
                                         &gt;
                                             &lt;span className="me-1"&gt;+&lt;/span&gt; Add New Activity
                                         &lt;/Button&gt;
@@ -656,7 +656,7 @@ const DashboardPage = <span class="cstat-no" title="statement not covered" ><spa
                                         &lt;Button 
                                             variant="outline-secondary" 
                                             size="sm"
-                                            onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setShowForm(false)}</span>
+                                            onClick={() =&gt; setShowForm(false)}
                                         &gt;
                                             Hide Form
                                         &lt;/Button&gt;
@@ -742,7 +742,7 @@ export default DashboardPage;</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-04T08:34:12.708Z
+                at 2026-01-06T14:32:27.857Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
